@@ -5,21 +5,26 @@ const Footer = () => {
   const { t } = useTranslation();
 
   return (
-    <footer className="glass-effect border-t border-border/50 mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <div className="text-center text-muted-foreground">
-          <p className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-3 text-sm sm:text-base">
-            <span className="font-semibold">{t('footer.copyright')}</span>
-            <span className="hidden sm:inline">|</span>
-            <span className="flex items-center space-x-2">
-              <span>{t('footer.madeWith').split('❤️')[0]}</span>
-              <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-primary fill-primary animate-glow" />
-              <span className="gradient-text font-semibold">{t('footer.madeWith').split('❤️')[1]}</span>
-            </span>
-          </p>
-        </div>
-      </div>
-    </footer>
+<footer className="bg-gray-900 text-gray-300 border-t border-gray-700 shadow-inner mt-auto">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="text-center">
+      <p className="text-sm sm:text-base font-medium">
+        <span className="block sm:inline text-white font-semibold">
+          {t('footer.copyright')}
+        </span>
+        <span className="hidden sm:inline mx-2 text-gray-500">|</span>
+        <span className="inline-flex items-center space-x-1">
+          <span>{t('footer.madeWith').split('❤️')[0]}</span>
+          <Heart className="w-5 h-5 text-rose-500 animate-pulse fill-rose-500" />
+          <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-orange-400">
+            {t('footer.madeWith').split('❤️')[1]}
+          </span>
+        </span>
+      </p>
+    </div>
+  </div>
+</footer>
+
   );
 };
 
