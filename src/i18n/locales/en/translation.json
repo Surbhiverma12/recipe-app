@@ -1,0 +1,39 @@
+{
+  "nav": {
+    "home": "Home",
+    "recipes": "Recipes",
+    "addRecipe": "Add Recipe",
+    "about": "About"
+  },
+  "home": {
+    "welcome": "Welcome to Global Recipe Hub",
+    "subtitle": "Discover recipes from around the world 🌎",
+    "addRecipeBtn": "➕ Add Recipe",
+    "viewRecipesBtn": "👀 View Recipes"
+  },
+  "recipes": {
+    "title": "Recipes",
+    "noRecipes": "No recipes added yet.",
+    "comingSoon": "(Feature coming soon...)",
+    "backToHome": "🔙 Back to Home"
+  },
+  "addRecipe": {
+    "title": "Add Your Favorite Recipe",
+    "underConstruction": "This feature is under construction!",
+    "features": {
+      "title": "Soon you'll be able to:",
+      "addTitle": "Add recipe title 🥣",
+      "addIngredients": "Write ingredients 🧂",
+      "addSteps": "Describe steps 👩‍🍳"
+    }
+  },
+  "about": {
+    "title": "About Global Recipe Hub",
+    "description": "This web app allows users to explore and share recipes from different cultures — with support for multiple languages.",
+    "credit": "Built with React, i18next, and TailwindCSS by Surabhi Verma."
+  },
+  "footer": {
+    "copyright": "© 2025 Global Recipe Hub",
+    "madeWith": "Made with ❤️ by Surabhi Verma"
+  }
+}
