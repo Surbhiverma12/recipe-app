@@ -4,43 +4,31 @@ import { useTranslation } from "react-i18next";
 import { ArrowLeft, UtensilsCrossed } from "lucide-react";
 import { motion } from "framer-motion";
 import PageTransition from "../components/PageTransition";
-
-const sampleRecipes = [
-  {
-    id: 1,
-    title: "Paneer Butter Masala",
-    image:
-      "https://images.unsplash.com/photo-1701579231378-3726490a407b?auto=format&fit=crop&w=800&q=60",
-    description:
-      "A rich and creamy North Indian curry made with paneer and butter.",
-  },
-  {
-    id: 2,
-    title: "Vegetable Biryani",
-    image:
-      "https://images.unsplash.com/photo-1630409346824-4f0e7b080087?auto=format&fit=crop&w=800&q=60",
-    description:
-      "A flavorful rice dish cooked with vegetables and aromatic spices.",
-  },
-  {
-    id: 3,
-    title: "Masala Dosa",
-    image:
-      "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?auto=format&fit=crop&w=800&q=60",
-    description:
-      "Crispy dosa filled with spicy potato masala and served with chutneys.",
-  },
-];
+import axios from "axios";
 
 const Recipes = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation(); 
+  const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // Simulate data fetching delay
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500);
-    return () => clearTimeout(timer);
-  }, []);
+  // ✅ Fallback to localhost if env variable missing
+  const backendURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+
+useEffect(() => {
+  const fetchRecipes = async () => {
+    try {
+      const res = await axios.get(`${backendURL}/api/recipes?lang=${i18n.language}`);
+      setRecipes(res.data);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to fetch recipes");
+      setLoading(false);
+    }
+  };
+  fetchRecipes();
+}, [backendURL, i18n.language]);
 
   return (
     <PageTransition>
@@ -64,7 +52,19 @@ const Recipes = () => {
             </p>
           </motion.div>
 
-          {/* Recipes or Loading */}
+          {/* Error */}
+          {error && !loading && (
+            <p className="text-red-500 text-center mb-6">{error}</p>
+          )}
+
+          {/* No Recipes */}
+          {!loading && !error && recipes.length === 0 && (
+            <p className="text-center text-gray-500 mb-6">
+              {t("recipes.noRecipes") || "No recipes found. Add one!"}
+            </p>
+          )}
+
+          {/* Loading skeleton */}
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {[1, 2, 3].map((i) => (
@@ -89,28 +89,30 @@ const Recipes = () => {
               transition={{ delay: 0.3 }}
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
             >
-              {sampleRecipes.map((recipe, index) => (
+              {recipes.map((recipe, index) => (
                 <motion.div
-                  key={recipe.id}
+                  key={recipe._id || index}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   className="bg-white/80 backdrop-blur-md shadow-xl rounded-3xl overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
                 >
-                  <img
-                    src={recipe.image}
-                    alt={recipe.title}
-                    className="w-full h-52 object-cover"
-                  />
+                  {recipe.image && (
+                    <img
+                      src={recipe.image}
+                      alt={recipe.title}
+                      className="w-full h-52 object-cover"
+                    />
+                  )}
                   <div className="p-6 text-left">
                     <h2 className="text-2xl font-bold text-gray-800 mb-2">
                       {recipe.title}
                     </h2>
-                    <p className="text-gray-600 mb-4 text-sm">
-                      {recipe.description}
+                    <p className="text-gray-600 mb-4 text-sm line-clamp-3">
+                      {recipe.description || "No description provided."}
                     </p>
                     <Link
-                      to={`/recipes/${recipe.id}`}
+                      to={`/recipes/${recipe._id || index}`}
                       state={{ recipe }}
                       className="inline-block px-4 py-2 bg-gradient-to-r from-orange-400 to-amber-500 text-white rounded-full text-sm font-semibold hover:shadow-md transition-all"
                     >
@@ -121,6 +123,17 @@ const Recipes = () => {
               ))}
             </motion.div>
           )}
+
+          {/* Back Button */}
+          <div className="text-center mt-12">
+            <Link
+              to="/"
+              className="inline-flex items-center space-x-2 text-orange-600 font-semibold hover:underline"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span>{t("recipes.backToHome") || "Back to Home"}</span>
+            </Link>
+          </div>
         </div>
       </div>
     </PageTransition>

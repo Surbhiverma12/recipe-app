@@ -3,6 +3,7 @@ const translateText = require("../utils/translate"); // your working translate f
 
 // Add a new recipe
 exports.addRecipe = async (req, res) => {
+  console.log("add is called")
   try {
     const { title, description, ingredients, steps, image } = req.body;
 
